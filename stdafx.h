@@ -7,9 +7,6 @@
 
 #include "targetver.h"
 
-#include <gl/glut.h>
-#include <stdio.h>
-
 
 
 // TODO: reference additional headers your program requires here
