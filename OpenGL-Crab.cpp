@@ -1,155 +1,106 @@
-// OpenGL-Crab.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
-#include <windows.h>
-#include <GL/gl.h>
-#include <GL/glut.h>
+#include "shaders.h"
 
-void init()
-{
-	GLfloat mat_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light_position[] = { 0.0, 0.0, 10.0, 1.0 };
-	GLfloat lm_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+#pragma comment(lib, "opengl32.lib")
+#pragma comment(lib, "freeglut.lib")
+#pragma comment(lib, "glew32.lib")
+#pragma comment(lib, "glfw3.lib")
+#pragma comment(lib, "glfw3dll.lib")
 
-	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialf(GL_FRONT, GL_SHININESS, 50.0);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lm_ambient);
+int main(int argc, char* argv[]) {
 
-	glShadeModel(GL_SMOOTH);
-
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_NORMALIZE);
-
-	glDepthFunc(GL_LESS);
-	glEnable(GL_DEPTH_TEST);
-}
-
-static int frame_no = 0;
-
-void displayObjects()
-{
-	GLfloat torus_diffuse[] = { 0.7, 0.7, 0.0, 1.0 };
-	GLfloat cube_diffuse[] = { 0.0, 0.7, 0.7, 1.0 };
-	GLfloat sphere_diffuse[] = { 0.7, 0.0, 0.7, 1.0 };
-	GLfloat octa_diffuse[] = { 0.7, 0.4, 0.4, 1.0 };
-
-	glPushMatrix();
-
-	glRotatef(30.0, 1.0, 0.0, 0.0);
-
-	glPushMatrix();
-	glRotatef(frame_no, 0.0, 1.0, 0.0);
-
-	glPushMatrix();
-	glTranslatef(-0.80, 0.35, 0.0);
-	glRotatef(100.0, 1.0, 0.0, 0.0);
-	glRotatef(frame_no, 1.0, 0.0, 0.0);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, torus_diffuse);
-	glScaled(0.5*(((frame_no - 179)>0 ? frame_no - 179 : 179 - frame_no)<40 ? 40 : ((frame_no - 179)>0 ? frame_no - 179 : 179 - frame_no)) / 180, 0.5, 0.5);
-	glutSolidTorus(0.275, 0.85, 100, 100);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0.75, 0.60, 0.0);
-	glRotatef(30.0, 1.0, 0.0, 0.0);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, sphere_diffuse);
-	glScalef(0.5, 0.5, 0.5);
-	glutSolidSphere(1.0, 100, 100);
-	glPopMatrix();
-	glPopMatrix();
-
-
-
-	glPushMatrix();
-	glRotatef(frame_no, 0.0, -1.0, 0.0);
-	glPushMatrix();
-	glTranslatef(-0.75, -0.50, 0.0);
-	glRotatef(45.0, 0.0, 0.0, 1.0);
-	glRotatef(45.0, 1.0, 0.0, 0.0);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, cube_diffuse);
-	glScalef(0.5, 0.5, 0.5);
-	glutSolidCube(1.5);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0.70, -0.90, 0.25);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, octa_diffuse);
-	glScalef(0.5, 0.5, 0.5);
-	glutSolidTeapot(1.0);
-	glPopMatrix();
-	glPopMatrix();
-
-	glPopMatrix();
-}
-
-void display()
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if (frame_no < 360)
-		++frame_no;
-	else
-		frame_no = 0;
-
-	glMatrixMode(GL_PROJECTION);
-
-	glPushMatrix();
-
-	glRotatef(2 * frame_no, 0.0, -1.0, 0.0);
-
-	glMatrixMode(GL_MODELVIEW);
-
-	displayObjects();
-
-	glMatrixMode(GL_PROJECTION);
-
-	glPopMatrix();
-
-	glFlush();
-
-	glutSwapBuffers();
-}
-
-void reshape(GLsizei w, GLsizei h)
-{
-	if (h > 0 && w > 0) {
-		glViewport(0, 0, w, h);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		if (w <= h) {
-			glFrustum(-0.1, 0.1, -0.1, 0.1, 0.1, 4.1);
-			glTranslatef(0.0, 0.0, -3.0);
-		}
-		else {
-			glFrustum(-0.1, 0.1, -0.1, 0.1, 0.1, 5.1);
-			glTranslatef(0.0, 0.0, -3.0);
-		}
-		glMatrixMode(GL_MODELVIEW);
+	if (!glfwInit()) {
+		fprintf(stderr, "Unable to init GLFW\n");
+		return -1;
 	}
-}
 
-int main(int argc, char** argv)
-{
-	glutInit(&argc, argv);
+	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // We want OpenGL 3.3
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+	// Open a window and create its OpenGL context 
+	GLFWwindow* window; // (In the accompanying source code, this variable is global) 
+	window = glfwCreateWindow(1024, 768, "Tutorial 01", NULL, NULL);
+	if (window == NULL){
+		fprintf(stderr, "Failed to open GLFW window.\n");
+		glfwTerminate();
+		return -1;
+	}
 
-	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(1280, 1024);
+	glfwMakeContextCurrent(window); // Initialize GLEW 
+	// Initialize GLEW
+	glewExperimental = true; // Needed for core profile
+	if (glewInit() != GLEW_OK) {
+		fprintf(stderr, "Failed to initialize GLEW\n");
+		return -1;
+	}
 
-	glutCreateWindow("GPOB: OpenGL");
+	// Ensure we can capture the escape key being pressed below
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);
-	glutIdleFunc(display);
+	// Dark blue background
+	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
-	init();
+	GLuint VertexArrayID;
+	glGenVertexArrays(1, &VertexArrayID);
+	glBindVertexArray(VertexArrayID);
 
-	glutMainLoop();
+	// Create and compile our GLSL program from the shaders
+	GLuint programID = LoadShaders("vertex.shader", "fragment.shader");
+
+
+	static const GLfloat g_vertex_buffer_data[] = {
+		-1.0f, -1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+	};
+
+	GLuint vertexbuffer;
+	glGenBuffers(1, &vertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
+	do{
+
+		// Clear the screen
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		// Use our shader
+		glUseProgram(programID);
+
+		// 1rst attribute buffer : vertices
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glVertexAttribPointer(
+			0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+			);
+
+		// Draw the triangle !
+		glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
+
+		glDisableVertexAttribArray(0);
+
+		// Swap buffers
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+
+	} // Check if the ESC key was pressed or the window was closed
+	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
+	glfwWindowShouldClose(window) == 0);
+
+	// Cleanup VBO
+	glDeleteBuffers(1, &vertexbuffer);
+	glDeleteVertexArrays(1, &VertexArrayID);
+	glDeleteProgram(programID);
+
+	// Close OpenGL window and terminate GLFW
+	glfwTerminate();
 
 	return 0;
 }

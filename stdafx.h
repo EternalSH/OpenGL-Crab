@@ -7,6 +7,20 @@
 
 #include "targetver.h"
 
+#include <GL\glew.h>
+#include <GLFW\glfw3.h>
+
+#include <glm\glm.hpp>
+
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include <stdio.h>
+#include <stdlib.h>
+
 
 
 // TODO: reference additional headers your program requires here
