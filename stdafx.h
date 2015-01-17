@@ -7,19 +7,18 @@
 
 #include "targetver.h"
 
-#include <GL\glew.h>
-#include <GLFW\glfw3.h>
+#include <GL\glut.h>
 
-#include <glm\glm.hpp>
+#include "constants.h"
+#include "geometry.h"
 
-#include <algorithm>
-#include <fstream>
+#include "camera.h"
+#include "keyboard.h"
+
 #include <iostream>
-#include <string>
-#include <vector>
-
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
 
 
 

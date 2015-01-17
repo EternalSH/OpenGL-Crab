@@ -7,7 +7,7 @@
 #pragma comment(lib, "glfw3.lib")
 #pragma comment(lib, "glfw3dll.lib")
 
-int main(int argc, char* argv[]) {
+int main2(int argc, char* argv[]) {
 
 	if (!glfwInit()) {
 		fprintf(stderr, "Unable to init GLFW\n");
