@@ -11,27 +11,27 @@ void onKeyPressed(int key, int xx, int yy) {
 
 	switch (key) {
 		case GLUT_KEY_PAGE_UP:
-			cameraDelta.r = -0.5f;
+			cameraDelta.r = -0.05f;
 			break;
 
 		case GLUT_KEY_PAGE_DOWN:
-			cameraDelta.r = 0.5f;
+			cameraDelta.r = 0.05f;
 			break;
 
 		case GLUT_KEY_LEFT: 
-			cameraDelta.phi = -0.01f; //-1.0f * GKOM_KEYBOARD_STEP_PHI;
+			cameraDelta.phi = -0.005f; //-1.0f * GKOM_KEYBOARD_STEP_PHI;
 			break;
 
 		case GLUT_KEY_RIGHT: 
-			cameraDelta.phi = 0.01f; // GKOM_KEYBOARD_STEP_PHI;
+			cameraDelta.phi = 0.005f; // GKOM_KEYBOARD_STEP_PHI;
 			break;
 
 		case GLUT_KEY_UP: 
-			cameraDelta.theta = 0.01f; // GKOM_KEYBOARD_STEP_THETA;
+			cameraDelta.theta = 0.001f; // GKOM_KEYBOARD_STEP_THETA;
 			break;
 
 		case GLUT_KEY_DOWN: 
-			cameraDelta.theta = -0.01f; //-1.0f * GKOM_KEYBOARD_STEP_THETA;
+			cameraDelta.theta = -0.001f; //-1.0f * GKOM_KEYBOARD_STEP_THETA;
 			break;
 	}
 }
