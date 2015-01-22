@@ -11,5 +11,3 @@ typedef struct _polar_coordinates {
 	float phi;
 	float theta;
 } PolarCoordinates;
-
-extern void drawHalfSphere(const GLfloat r, int segments);

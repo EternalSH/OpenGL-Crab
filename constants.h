@@ -1,5 +1,0 @@
-#pragma once
-
-#define GKOM_KEYBOARD_STEP_R		0.01f
-#define GKOM_KEYBOARD_STEP_PHI		0.05f
-#define GKOM_KEYBOARD_STEP_THETA	0.01f

@@ -1,21 +1,26 @@
 #include "stdafx.h"
-
+#include "camera.h"
 #include "crab.h"
 #include "geometry.h"
+#include "keyboard.h"
+#include "main.h"
+#include "seafloor.h"
 #include "textures.h"
 
+#include <GL\glut.h>
 #include <math.h>
 
-#define PI 3.14f
-
+GLfloat lightStrength = 0.5f;
 long frame = 0;
 
 void changeSize(int w, int h) {
 
 	// Prevent a divide by zero, when window is too short
 	// (you cant make a window of zero width).
-	if (h == 0)
+	if (h == 0) {
 		h = 1;
+	}		
+
 	float ratio = (w * 1.0f) / (h * 1.0f);
 
 	// Use the Projection Matrix
@@ -28,77 +33,38 @@ void changeSize(int w, int h) {
 	glViewport(0, 0, w, h);
 
 	// Set the correct perspective.
-	gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+	gluPerspective(45.0f, ratio, 0.1f, 300.0f);
 
 	// Get Back to the Modelview
 	glMatrixMode(GL_MODELVIEW);
 }
 
-
-
-void drawSeafloor() {
-	GLfloat seafloorDiffuse[] = { 0.9f, 0.5f, 0.1f, 1.0f };
-
-	glPushMatrix();
-	glMaterialfv(GL_FRONT, GL_AMBIENT, seafloorDiffuse);
-	glScaled(30.0f, 1.0f, 30.0f);
-	glutSolidCube(1.0);
-	
-	glPopMatrix();
-}
-
 void renderScene(void) {
 	frame = (frame + 1) % 20000;
 	PolarCoordinates cameraDelta = getCameraDelta();
-
-	// Clear Color and Depth Buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// Get camera position
 	StandardCoordinates cameraPosition = updateCameraPosition(cameraDelta);
-	//printf("Camera position %f %f %f \n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
-	printf("frame %d", frame);
-
-	// Load empty tranformations matrix
 	glLoadIdentity();
-	// Set the camera
 
 	gluLookAt(
 		cameraPosition.x, cameraPosition.y, cameraPosition.z,
 		0.0f, 0.0f, 0.0f,
 		0.0f, 10.0f, 0.0f);
 
-	
-	GLdouble planeX[4] = { 1.0, 0.0, 0.0, 0.0 };
+	lightStrength = fmax(0.0f, fmin(1.0f, lightStrength + getLightDelta()));
 
-	
+	GLfloat light_position0[] = { 0.0f, 50.0f, 0.0f, lightStrength };
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position0);
 
-	// Draw ground
-	//glBindTexture(GL_TEXTURE_2D, getTexture(GKOM_TEX_SEAFLOOR));
-	
-	//glBegin(GL_QUADS);
-	//glTexCoord2f(0.0f, 0.0f); glVertex3f(-100.0f, 0.0f, -100.0f);
-	//glTexCoord2f(0.0f, 16.0f); glVertex3f(-100.0f, 0.0f, 100.0f);
-	//glTexCoord2f(16.0f, 16.0f); glVertex3f(100.0f, 0.0f, 100.0f);
-	//glTexCoord2f(16.0f, 0.0f); glVertex3f(100.0f, 0.0f, -100.0f);
-	//glEnd();
+	GLfloat light_position1[] = { 0.0f, 1.0f, 20.0f, lightStrength / 2.0f };
+	glLightfv(GL_LIGHT1, GL_POSITION, light_position0);
 
-	// Draw 
-	
-	//drawSeafloor();
-	drawCrab();
-
-	//glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
-	//glTranslatef(0.0f, 25.0f, 0.0f);
-
-
-
+	drawSeafloor();	
+	glTranslatef(0.0f, 4.0f, 0.0f);
+	drawCrab();	
 
 	glutSwapBuffers();
 }
-
-
-
 
 int main(int argc, char **argv) {
 
@@ -111,67 +77,39 @@ int main(int argc, char **argv) {
 	glutInitWindowSize(500, 500);
 	glutCreateWindow("OpenGL project");
 
-	// register callbacks
 	glutDisplayFunc(renderScene);
 	glutReshapeFunc(changeSize);
 	glutIdleFunc(renderScene);
 
 	glutSpecialFunc(onKeyPressed);
-	// here are the new entries
 	glutIgnoreKeyRepeat(1);
 	glutSpecialUpFunc(onKeyReleased);
 
-	//loadTextures();
-
-	// remove //
-	//float ambientLevel = 2.6;
-	//GLfloat light_diffuse[] = { 0.1, 0.1, 0.1, 1.0 };
-	//GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	//GLfloat LightPosition2[] = { 0.0f, 20.0f, 0.0f, 1.0f };
-	//GLfloat LightPosition1[] = { 10.0f, 35.0f, 10.0f, 1.0f };
-	//GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	//GLfloat mat_shininess[] = { 10.0 };
-
-	//GLfloat ambient[] = { ambientLevel, ambientLevel, ambientLevel, 1.0f };
-	//glMaterialfv(GL_FRONT, GL_AMBIENT, mat_specular);
-
-	//glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);		// Setup The Ambient Light
-	//glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
-	//glLightfv(GL_LIGHT0, GL_POSITION, LightPosition2);	// Position The Light
-
-	//glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);		// Setup The Ambient Light
-	//glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
-	//glLightfv(GL_LIGHT1, GL_POSITION, LightPosition1);	// Position The Light
-
-	//glEnable(GL_LIGHT0);
-	//glEnable(GL_LIGHT1);
-
-	//glEnable(GL_LIGHTING);
-	// remove //
+	loadTextures();
 
 	GLfloat mat_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light_position[] = { 0.0, 0.0, 10.0, 1.0 };
-	GLfloat lm_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };	
+	GLfloat lm_ambient[] = { 0.1f, 0.1f, 0.1f, 0.05f };		
+	
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialf(GL_FRONT, GL_SHININESS, 50.0);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glMaterialf(GL_FRONT, GL_SHININESS, 5.0);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lm_ambient);
 
 	glShadeModel(GL_SMOOTH);
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
 	glEnable(GL_NORMALIZE);
 
 	glDepthFunc(GL_LESS);
 	glEnable(GL_DEPTH_TEST);
 
-	// OpenGL init
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	//glEnable(GL_TEXTURE_2D);									
+	glEnable(GL_TEXTURE_2D);									
+	glEnable(GL_TEXTURE_GEN_S);
+	glEnable(GL_TEXTURE_GEN_T);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				
 	glClearDepth(1.0f);
 	glEnable(GL_DEPTH_TEST);							

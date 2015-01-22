@@ -1,11 +1,13 @@
 #include "stdafx.h"
 #include "textures.h"
-#include "GL\glut.h"
-#include "soil.h"
+
+#include <stdio.h>
+#include <GL\glut.h>
+#include <soil.h>
 
 #pragma comment(lib, "SOIL")
 
-static GLuint textures[2];
+static GLuint textures[6];
 
 static void _loadTexture(GLuint id, const char *filepath, bool repeat) {
 	textures[id] = SOIL_load_OGL_texture(filepath, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
@@ -23,8 +25,14 @@ static void _loadTexture(GLuint id, const char *filepath, bool repeat) {
 bool loadTextures() {
 	_loadTexture(GKOM_TEX_SEAFLOOR, "textures/sand.jpg", true);
 	_loadTexture(GKOM_TEX_SEASURFACE, "textures/water.jpg", true);
-	
-	// TODO: error checking
+
+	_loadTexture(GKOM_TEX_CRAB_ARM,  "textures/crab-arm.png",  true);
+	_loadTexture(GKOM_TEX_CRAB_BODY, "textures/crab-body.png", true);
+	_loadTexture(GKOM_TEX_CRAB_GRIP, "textures/crab-grip.png", true);
+	_loadTexture(GKOM_TEX_CRAB_LEG,  "textures/crab-leg.png",  true);
+
+	printf("Textures loaded.\n");
+
 	return true;
 }
 

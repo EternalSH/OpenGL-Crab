@@ -24,13 +24,7 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="snowman.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="geometry.h">
@@ -45,15 +39,18 @@
     <ClInclude Include="crab.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="seafloor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="snowman.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="keyboard.cpp">
@@ -68,8 +65,28 @@
     <ClCompile Include="crab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="geometry.cpp">
+    <ClCompile Include="seafloor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\crab-arm.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\crab-body.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\crab-grip.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\crab-leg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\sand.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\water.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
