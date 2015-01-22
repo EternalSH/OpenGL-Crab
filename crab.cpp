@@ -13,6 +13,8 @@ static GLfloat crabLegsColour[4] = { 1.00f, 0.73f, 0.23f, 1.0 };
 
 static void drawCrabArm();
 static void drawCrabBody();
+static void drawEye();
+static void drawEyes();
 static void drawCrabGrip();
 static void drawCrabLeg();
 static void drawCrabLegs();
@@ -23,6 +25,11 @@ void drawCrab() {
 
 		drawCrabBody();
 		
+		glPushMatrix();
+			glTranslatef(0.0f, 10.0f, 13.0f);
+			drawEyes();
+		glPopMatrix();
+
 		glPushMatrix();
 			glTranslatef(-18.0f, 0.0f, 0.0f);
 			drawCrabLegs();
@@ -123,6 +130,34 @@ static void drawCrabBody() {
 			gluCylinder(cylinderQuadratic1, 10.0f, 9.0f, 2.7f, 64, 64);
 			gluDeleteQuadric(cylinderQuadratic1);
 		glPopMatrix();
+	glPopMatrix();
+}
+
+static void drawEye() {
+	glPushMatrix();
+		glRotatef(-18.0f, 1.0f, 0.0f, 0.0f);
+
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, crabBodyColour);
+		glBindTexture(GL_TEXTURE_2D, getTexture(GKOM_TEX_CRAB_BODY));
+		glutSolidSphere(2.0f, 32, 32);
+
+		glBindTexture(GL_TEXTURE_2D, getTexture(GKOM_TEX_CRAB_EYE));
+		glTranslatef(0.0f, 0.0f, 0.4f);
+		glutSolidSphere(1.8, 32, 32);
+
+		glBindTexture(GL_TEXTURE_2D, getTexture(GKOM_TEX_CRAB_PUPIL));
+		glTranslatef(0.0f, 0.0f, 1.4f);
+		glScalef(1.0f, 1.0f, 0.5f);
+		glutSolidSphere(1.0f, 32, 32);
+	glPopMatrix();
+}
+
+static void drawEyes() {
+	glPushMatrix();
+		glTranslatef(-2.25f, 0.0f, 0.0f);
+		drawEye();
+		glTranslatef(5.0f, 0.0f, 0.0f);
+		drawEye();
 	glPopMatrix();
 }
 
