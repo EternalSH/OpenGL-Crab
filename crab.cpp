@@ -3,6 +3,7 @@
 
 #include <GL\glut.h>
 
+static void drawCrabArm();
 static void drawCrabBody();
 static void drawCrabGrip();
 static void drawCrabLeg();
@@ -28,54 +29,57 @@ void drawCrab() {
 		glPushMatrix();
 			glTranslatef(-5.0f, 8.0f, 20.0f);
 			glRotatef(-160.0f, 0.0f, 1.0f, 0.0f);
-
-			glPushMatrix();
-				glPushMatrix();
-					glTranslatef(0.8f, 0.0f, 9.5f);
-					glRotatef(185.0f, 0.0f, 1.0f, 0.0f);
-
-					glPushMatrix();
-						glTranslatef(0.0f, 0.0f, 6.5f);
-						GLUquadricObj *diskQuadratic2 = gluNewQuadric();
-						gluDisk(diskQuadratic2, 0.0f, 1.0f, 64, 4);
-						gluDeleteQuadric(diskQuadratic2);
-					glPopMatrix();
-
-					glPushMatrix();
-						GLUquadricObj *cylinderQuadratic1 = gluNewQuadric();
-						gluCylinder(cylinderQuadratic1, 0.8f, 1.0f, 6.5f, 64, 64);
-						gluDeleteQuadric(cylinderQuadratic1);
-					glPopMatrix();
-
-					glTranslatef(0.2f, 0.0f, 0.1f);
-					glRotatef(100.0f, 0.0f, 1.0f, 0.0f);
-
-					glPushMatrix();
-						glutSolidSphere(1.1f, 64, 64);
-					glPopMatrix();
-
-					glPushMatrix();
-						GLUquadricObj *cylinderQuadratic2 = gluNewQuadric();
-						gluCylinder(cylinderQuadratic2, 1.1f, 0.7f, 10.5f, 64, 64);
-						gluDeleteQuadric(cylinderQuadratic2);
-						glPopMatrix();
-					glPopMatrix();
-				glPopMatrix();
-
-				glTranslatef(0.0f, -1.15f, 0.0f);
-				glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
-				glScalef(0.5f, 0.5f, 0.5f);
-				drawCrabGrip();
-			glPopMatrix();
-
-			
+			drawCrabArm();
 		glPopMatrix();
 
-
-	
+		glPushMatrix();
+			glTranslatef(5.0f, 8.0f, 20.0f);
+			glRotatef(160.0f, 0.0f, 1.0f, 0.0f);
+			glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
+			drawCrabArm();
+		glPopMatrix();	
 	glPopMatrix();
 }
 
+static void drawCrabArm() {
+	glPushMatrix();
+		glPushMatrix();
+			glTranslatef(0.8f, 0.0f, 9.5f);
+			glRotatef(185.0f, 0.0f, 1.0f, 0.0f);
+
+			glPushMatrix();
+				glTranslatef(0.0f, 0.0f, 6.5f);
+				GLUquadricObj *diskQuadratic2 = gluNewQuadric();
+				gluDisk(diskQuadratic2, 0.0f, 1.0f, 64, 4);
+				gluDeleteQuadric(diskQuadratic2);
+			glPopMatrix();
+
+			glPushMatrix();
+				GLUquadricObj *cylinderQuadratic1 = gluNewQuadric();
+				gluCylinder(cylinderQuadratic1, 0.8f, 1.0f, 6.5f, 64, 64);
+				gluDeleteQuadric(cylinderQuadratic1);
+			glPopMatrix();
+
+			glTranslatef(0.2f, 0.0f, 0.1f);
+			glRotatef(100.0f, 0.0f, 1.0f, 0.0f);
+
+			glPushMatrix();
+				glutSolidSphere(1.1f, 64, 64);
+			glPopMatrix();
+
+			glPushMatrix();
+				GLUquadricObj *cylinderQuadratic2 = gluNewQuadric();
+				gluCylinder(cylinderQuadratic2, 1.1f, 0.7f, 10.5f, 64, 64);
+				gluDeleteQuadric(cylinderQuadratic2);
+			glPopMatrix();
+		glPopMatrix();
+				
+		glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
+		glScalef(0.5f, 0.5f, 0.5f);
+		glTranslatef(0.0f, -3.0f, 0.0f);
+		drawCrabGrip();
+	glPopMatrix();
+}
 
 static void drawCrabBody() {
 	glPushMatrix();
