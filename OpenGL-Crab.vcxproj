@@ -95,6 +95,7 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="crab.cpp" />
+    <ClCompile Include="geometry.cpp" />
     <ClCompile Include="keyboard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="snowman.cpp" />

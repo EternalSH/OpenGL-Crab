@@ -1,9 +1,14 @@
 #include "stdafx.h"
 
 #include "crab.h"
+#include "geometry.h"
 #include "textures.h"
 
+#include <math.h>
+
 #define PI 3.14f
+
+long frame = 0;
 
 void changeSize(int w, int h) {
 
@@ -43,7 +48,7 @@ void drawSeafloor() {
 }
 
 void renderScene(void) {
-
+	frame = (frame + 1) % 20000;
 	PolarCoordinates cameraDelta = getCameraDelta();
 
 	// Clear Color and Depth Buffers
@@ -51,7 +56,8 @@ void renderScene(void) {
 
 	// Get camera position
 	StandardCoordinates cameraPosition = updateCameraPosition(cameraDelta);
-	printf("Camera position %f %f %f \n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
+	//printf("Camera position %f %f %f \n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
+	printf("frame %d", frame);
 
 	// Load empty tranformations matrix
 	glLoadIdentity();
@@ -63,7 +69,9 @@ void renderScene(void) {
 		0.0f, 10.0f, 0.0f);
 
 	
+	GLdouble planeX[4] = { 1.0, 0.0, 0.0, 0.0 };
 
+	
 
 	// Draw ground
 	//glBindTexture(GL_TEXTURE_2D, getTexture(GKOM_TEX_SEAFLOOR));
@@ -77,8 +85,15 @@ void renderScene(void) {
 
 	// Draw 
 	
-	drawSeafloor();
+	//drawSeafloor();
 	drawCrab();
+
+	//glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+	//glTranslatef(0.0f, 25.0f, 0.0f);
+
+
+
+
 	glutSwapBuffers();
 }
 
